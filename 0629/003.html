@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <title>Document</title>
+    <script>
+        /*
+        요청
+        - 서버주소, 메소드, 형식, 데이터들...
+        - <form> 
+            <form action="" method="" enctype="">
+                </form>
+                이 상태로 쓰면 좋겠지만 검증을 해야 한다.
+                그래서 form을 바로 넘기는게 아니라 
+                form > js로 선택후 submit()
+                전형적인 mvc 요청 방식
+
+          REST 방식에서는
+          form이 있다면 선택 후 serialize(), 없다면 js 객체를 만든다
+          $.ajax(`주소?bno=${bno}&pageno=${pageno}&pagesize=${pagesize}`) > method 가 get 일 경우 다 생략하고 주소만 길게 적으면 된다
+         
+          get이 아니라면 method를 적어야만 한다
+                데이터에 자바스크립트 객체를 넘겨야 하므로
+                자바스크립트 객체 만드는 코드가 하나 들어가야 된다
+                const params = {
+
+                }
+          $.ajax({
+                url: ,
+                data: ,
+                method: ""
+          })
+        */
+        const bno = 111
+        // 화면에 form이 있으면 사용하지만 없으면?
+        // js로 폼을 만들던지 아니면 js 객체를 만든다
+        $('#good').click(function() {
+           const response = await $.ajax(`/board/good?bno=${bno}`)
+        })
+        $('#update').click(function(){
+            const params = {
+                bno:bno,
+                title:$('#title').val(),
+                content:$('#content').val()
+            }
+            const response = await $.ajax({
+                url:'/board/update',
+                data:params,
+                method:'put'
+            })
+        })
+    </script>
+</head>
+<body>
+    <button id="good" data-no="111">추천</button>
+    <button id="bad" data-no="111">비추</button>
+    <hr>
+    <input type="text" id="title" value="제목입니다">
+    <textarea id="content">글의 본문 입니다</textarea>
+    <hr>
+    <button id="update">변경</button>
+    <button id="delete">삭제</button>    
+</body>
+</html>
