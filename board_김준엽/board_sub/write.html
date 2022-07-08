@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/script/main.js"></script>
+    <title>Board_write</title>
+</head>
+<div id="page">
+    <header>
+
+    </header>
+    <nav>
+
+    </nav>
+    <div id="main">
+        <aside>
+
+        </aside>
+        <section>
+            <table class="table table-hover">
+                <thead>
+                    <!-- <tr>
+                        <td>번호</td>
+                        <td>제목</td>
+                        <td>작성일</td>
+                        <td>읽기</td>
+                    </tr> -->
+                </thead>
+                <tbody id="list">
+                    <form id="write_form" action="http://192.168.0.34:8081/board/new" method="post" enctype="multipart/form-data">
+                        글쓴이:<br>
+                        <input type="text" name="writer" class="white" placeholder="ID는 필수 입력 입니다"><br>
+                        제목:<br>
+                        <input type="text" name="title"  class="white" placeholder="제목은 필수 입력 입니다"><br>
+                        사진:<br>
+                        <input type="file" name="attachment"><br>
+                        글 내용:<br>
+                        <textarea name="content" style="width: 600px; height: 150px;"></textarea><br>
+                        <button id="write" type="button">글쓰기</button>
+                    </form>
+                </tbody>
+            </table>
+            <ul id="pagination" class="pagination">
+
+            </ul>
+        </section>
+    </div>
+    <footer>
+
+    </footer>
+</div>
+</body>
+<script>
+    $('#write').click(async function(){
+        init();
+        const formData = new FormData(document.querySelector('#write_form'));
+        formData.append('title', $('#title').val());
+        await $.ajax({
+            url: "http://192.168.0.34:8081/board/new",
+            method: "post",
+            data: formData,
+            processData: false,
+            contentType: false
+        })
+        location.href = "/list0708.html"
+    })
+
+    $('#update').click(function() {
+            $.ajax({
+                url: "http://192.168.0.34:8081/board/" + board.bno,
+                method: "put",
+                deta: $('#update_form').serialize()
+            })
+        })
+</script>
+</html>

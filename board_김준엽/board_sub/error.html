@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/script/main.js"></script>
+    <title>Board_error</title>
+</head>
+  <body>
+    <div id="page">
+        <header>
+
+        </header>
+        <nav>
+
+        </nav>
+        <div id="main">
+            <aside>
+
+            </aside>
+            <section>
+                <table class="table table-hover">
+                    <thead>
+                        <!-- <tr>
+                            <td>번호</td>
+                            <td>제목</td>
+                            <td>작성일</td>
+                            <td>읽기</td>
+                        </tr> -->
+                    </thead>
+                    <tbody id="list">
+                        <div id="mainread">
+                            <h1>서버에 연결 할 수 없습니다.</h1>
+                            번호: <span id="bno"></span><br>
+                            제목: <input type="text" id="title"><br>
+                            <input type="text" id="writer">
+                            읽기: <span id="readCnt"></span><br>
+                            <img id="attachment" src="/image/error.png"><br>
+                            작성시간: <span id="writeTime"></span><br>
+                            
+                        </div>
+                    </tbody>
+                </table>
+                <ul id="pagination" class="pagination">
+
+                </ul>
+            </section>
+        </div>
+        <footer>
+
+        </footer>
+    </div>
+  </body>
+  <script>
+    const getBno = function() {
+    const bno = parseInt(location.search.substr(5));
+    if(isNaN(bno))
+      location.href="/list0708.html";
+    else
+      return bno;
+  }
+  const getResponse_re = async function (api, no) {
+    return await $.ajax(api + no);
+  }
+  const printContact = function ({bno, title, writer, readCnt, writeTime, attachment}) {
+    $('#bno').text(bno);
+    $('#title').val(title);
+    $('#attachment').attr('src', attachment);
+    $('#readCnt').text(readCnt);
+    $('#writeTime').text(writeTime);
+    $('#writer').val(writer);
+  }
+
+  $(document).ready(async function() {
+    init();
+    const api="http://192.168.0.34:8081/board/";
+    const bno = getBno();
+    const response = await getResponse_re(api, bno);
+    console.log(response);
+    printContact(response);
+    getPagination(response)
+
+    try {
+       const response = await $.ajax('http://192.168.0.34:/board/1111')
+    } catch(ex) {
+        if(ex.status===0) {
+            alert(ex.statusText)
+            location.href = "/board_sub/error.html";
+        }
+        if(ex.status===409) {
+            alert(ex.responseText);
+            location.href = "/board_sub/error.html";
+        }
+    }
+});
+  </script>
+</html>

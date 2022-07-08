@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/script/main.js"></script>
+    <script>
+      const getBno =()=>{
+        const bno = parseInt(location.search.substr(5));
+        if(isNaN(bno))
+          location.href="/list.html";
+        else
+          return bno;
+      }
+
+      const getResponse=async (api, no)=>{
+        return await $.ajax(api + no);
+      }
+
+      const printContact=({bno, title, content, readCnt, writeTime, attachment})=>{
+        $('#bno').text(bno);
+        $('#title').val(title);
+        $('#content').val(content);
+        $('#attachment').attr('src', attachment);
+        $('#readCnt').text(readCnt);
+        $('#writeTime').text(writeTime);
+      }
+
+      $(document).ready(async function() {
+        const api="http://192.168.0.34:8081/board/";
+        init();
+        const bno = getBno();
+        const response = await getResponse(api, bno);
+        printContact(response);
+
+        $("#update").click(async function() {
+          await $.ajax({
+            url:"http://192.168.0.34:8081/board/" + bno,
+            method: "put",
+            // 폼이 없어서 serialize()못하고 제목과 내용을 담은 객체를 수동으로 만든다
+            data: {title: $('#title').val(), content:$('#content').val()}
+          });
+          // 현재 화면을 다시 띄운다
+          location.reload();
+        })
+
+        $("#delete").click(async function() {
+          await $.ajax({
+            url:"http://192.168.0.34:8081/board/" + bno,
+            method: "delete",
+          });
+          // 글을 삭제했으므로 현재 화면이 없다. list.html로 이동
+          location.href="/list.html";
+        })
+      });
+    </script>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td id="bno"></td>
+      </tr>
+      <tr>
+        제목: <input type="text" id="title">
+      </tr>
+      <tr>
+        <td><img id="attachment"></td>
+      </tr>
+      <tr>
+        내용: <input type="text" id="content">
+      </tr>
+      <tr>
+        <td id="readCnt"></td>
+      </tr>
+      <tr>
+        <td id="writeTime"></td>
+      </tr>
+    </table>
+    <button id="update">변경</button>
+    <button id="delete">삭제</button>
+  </body>
+</html>

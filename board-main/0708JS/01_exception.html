@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <title>예외(exception)</title>
+</head>
+<body>
+    <!-- 1. 사용자가 파일명 입력,
+         2. 파일 오픈,
+         3. 파일 출력
+
+         1번에서 파일명이 틀리면 프로그램이 정지된다
+         > 그래서 ~ 어떻게 하라고 예외 처리 해준다
+
+         <에러 핸들링>
+
+         try {
+            코드들
+            const response = await $.ajax(); 
+            출력 코드들.... // 200인 경우
+            이게 실패할 수도 있다. 
+         } catch(ex) < 예외객체 {  
+            (에러들) 0, 400, 403, 404, 405, 500.... 409
+           (예외에 대한 처리 수행)       거의 발생하지 않는 409를 사용
+            if(ex.response === 409) {
+                alert(ex.responseText); // 글을 찾을 수 없습니다
+                location.href = "www.naver.com" > 메인페이지로 이동
+            }
+
+            try {
+                // 코드 ...
+            } catch (erR) {
+                // 에러 핸들링
+            }
+        }
+    -->    
+
+    <script>
+        // try {
+        //     alert('try 블록 시작'); // (1)
+        //     lalala; // 에러, 변수가 정의되지 않음!
+        //     alert('try 블록 끝(절대 도달하지 않음)'); //(2)
+        // } catch(err) {
+        //     alert('에러가 발생했습니다!'); // (3)
+        // }
+// =============================================
+
+    $(document).ready(async function(){
+        try {
+       // const response = await $.ajax('http://192.168.0.34/board/all')
+       //const response = await $.ajax('http://192.168.0.34:8081/board/1111')
+       const response = await $.ajax('http://192.168.0.34:/board/1111')
+        console.log(response);
+    } catch(ex) {
+        // ex.response는 서버가 보내준 http 상태코드 
+        // 서버와 연결되지 않으면 0이 오더라
+        // status : 0 (console창에서 확인)
+        if(ex.status===0) {
+            alert("에러 발생 네이버로 이동합니다.")
+            location.href = "http://www.naver.com";
+            // location.href = "error.html"
+        }
+
+        // 서버에서 논리오류가 발생하면 409리턴되도록 만들어 놓음
+        if(ex.status===409) {
+            alert(ex.responseText);
+            location.href = "https://ko.javascript.info/try-catch"
+        }
+    }
+}) 
+    </script>
+</body>
+</html>
+
