@@ -1,0 +1,17 @@
+R2. maven 프로젝트로 지정하고 의존성 설정 : junit, lombok, jackson, commons-lang3
+
+R3. Board 엔티티 생성
+
+R4. WriteDto, UpdateDto, Page 생성
+
+R5. BoardService 작성 및 초기화
+
+R6. write 메소드 작성 및 테스트
+
+R7. read 메소드 작성 및 테스트
+
+R8. list 메소드 작성 및 테스트
+
+R9. update, delete 메소드 작성
+
+R10. 컨트롤러 작성
